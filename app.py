@@ -18,8 +18,6 @@ class Voice(db.Model):
     image_url = db.Column(db.String(200), nullable=False)
     audio_sample_url = db.Column(db.String(200), nullable=False)
 
-# Setup
-db.create_all()
 from views import *
 
 if __name__ == "__main__":
