@@ -7,7 +7,15 @@
 </script>
 <header>
 	<h1>Add a voice</h1>
-	<p>Link your own voice dataset/model</p>
+	<p>Link your own voice dataset/model. We reccommend creating a Github repo such as <a href="https://github.com/BenAAndrew/David-Attenborough-Voice">David Attenbourough</a>.</p>
+    <p>Please ensure the following:</p>
+    <ul>
+        <li>Ensure the name is the name of the person/character who's voice has been cloned</li>
+        <li>Ensure you explain how you gathered the data in the description</li>
+        <li>Ensure the dataset/model URLs <b>are not</b> a direct download so that users can check its contents before downloading</li>
+        <li>Ensure the audio sample URL <b>is</b> a direct path to a raw audiofile so that the site can play it</li>
+    </ul>
+    <p><b>Uploads which do not meet these conditions may be removed</b></p>
 </header>
 <form method="post" action="/create" name="voice-form">
     <div class="row gtr-uniform">
