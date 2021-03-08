@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<header>
+	<h1>Voice Cloning Hub <a href="https://github.com/BenAAndrew/Voice-Sharing-Hub" class="icon brands fa-github"><span class="label">GitHub</span></a></h1>
+	<p>A community hub for sharing voice synthesis datasets and models</p>
+</header>
+<section class="tiles">
+	{% for voice in voices %}
+		<article>
+			<span class="image">
+				<img src="{{ voice.image_url }}" alt="{{ voice.name }}" />
+			</span>
+			<a href="/voice?id={{ voice.id }}">
+				<h2>{{ voice.name }}</h2>
+			</a>
+		</article>
+	{% endfor %}
+</section>
+{% endblock %}

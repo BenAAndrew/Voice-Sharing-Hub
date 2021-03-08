@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<script>
+    var error = "{{ error }}";
+    if(error)
+        alert(error)
+</script>
+<header>
+	<h1>Add a voice</h1>
+	<p>Link your own voice dataset/model</p>
+</header>
+<form method="post" action="/create" name="voice-form">
+    <div class="row gtr-uniform">
+        <div class="col-6 col-12-xsmall">
+            <input type="text" name="name" id="name" value="" placeholder="Voice Name" maxlength=50 required>
+        </div>
+        <div class="col-12">
+            <div class="textarea-wrapper"><textarea name="description" id="description" placeholder="Describe the voice (source, quality etc.)" rows="3" required></textarea></div>
+        </div>
+        <div class="col-12">
+            <input type="text" name="dataset_url" id="dataset_url" value="" placeholder="Dataset URL" required>
+        </div>
+        <div class="col-12">
+            <input type="text" name="model_url" id="model_url" value="" placeholder="Model URL">
+        </div>
+        <div class="col-12">
+            <input type="text" name="image_url" id="image_url" value="" placeholder="Placeholder image URL" required>
+        </div>
+        <div class="col-12">
+            <input type="text" name="audio_sample_url" id="audio_sample_url" value="" placeholder="Audio sample URL">
+        </div>
+        <div class="col-12">
+            <ul class="actions">
+                <li><input type="submit" class="primary"></li>
+            </ul>
+        </div>
+    </div>
+</form>
+{% endblock %}
