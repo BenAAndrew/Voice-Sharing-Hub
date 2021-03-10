@@ -4,6 +4,7 @@ import os
 import threading
 
 app = Flask(__name__, template_folder="static", static_folder="static")
+os.makedirs(os.path.join("static", "samples"), exist_ok=True)
 
 # Database
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL')
