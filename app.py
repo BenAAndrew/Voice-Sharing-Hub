@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+import threading
 
 app = Flask(__name__, template_folder="static", static_folder="static")
 
@@ -19,7 +20,10 @@ class Voice(db.Model):
     image_url = db.Column(db.String(200), nullable=True)
     audio_sample_url = db.Column(db.String(200), nullable=True)
 
-db.create_all()
+lock = threading.Lock()
+with lock:
+    db.create_all()
+
 from views import *
 
 if __name__ == "__main__":
