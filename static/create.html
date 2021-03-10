@@ -12,6 +12,7 @@
     <ul>
         <li>Ensure the name is the name of the person/character who's voice has been cloned</li>
         <li>Ensure you explain how you gathered the data in the description</li>
+        <li>Ensure the source URL is a valid path to where you originally obtained the source data</li>
         <li>Ensure the dataset/model URLs <b>are not</b> a direct download so that users can check its contents before downloading</li>
         <li>Ensure the audio sample URL <b>is</b> a direct path to a raw audiofile so that the site can play it</li>
     </ul>
@@ -24,6 +25,9 @@
         </div>
         <div class="col-12">
             <div class="textarea-wrapper"><textarea name="description" id="description" placeholder="Describe the voice (source, quality etc.)" rows="3" required></textarea></div>
+        </div>
+        <div class="col-12">
+            <input type="text" name="source_url" id="source_url" value="" placeholder="Source URL" required>
         </div>
         <div class="col-12">
             <input type="text" name="dataset_url" id="dataset_url" value="" placeholder="Dataset URL" required>

@@ -13,10 +13,11 @@ class Voice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(200), nullable=False)
+    source_url = db.Column(db.String(200), nullable=False)
     dataset_url = db.Column(db.String(200), nullable=False)
-    model_url = db.Column(db.String(200), nullable=False)
-    image_url = db.Column(db.String(200), nullable=False)
-    audio_sample_url = db.Column(db.String(200), nullable=False)
+    model_url = db.Column(db.String(200), nullable=True)
+    image_url = db.Column(db.String(200), nullable=True)
+    audio_sample_url = db.Column(db.String(200), nullable=True)
 
 from views import *
 
