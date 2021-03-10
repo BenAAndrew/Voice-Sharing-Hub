@@ -18,7 +18,6 @@ class Voice(db.Model):
     dataset_url = db.Column(db.String(200), nullable=False)
     model_url = db.Column(db.String(200), nullable=True)
     image_url = db.Column(db.String(200), nullable=True)
-    audio_sample_url = db.Column(db.String(200), nullable=True)
 
 lock = threading.Lock()
 with lock:

@@ -10,12 +10,12 @@
 	  <div class="col-6">
 		<p>Description: {{ voice.description }}</p>
 		<p>Source: <a href="{{ voice.source_url }}">{{ voice.source_url }}</a></p>
-		{% if voice.audio_sample_url %}
+		{% if has_audio %}
 			<figure>
 				<figcaption>Audio sample</figcaption>
 				<audio
 					controls
-					src="{{ voice.audio_sample_url }}">
+					src="{{ audio_path }}">
 						Your browser does not support the
 						<code>audio</code> element.
 				</audio>
