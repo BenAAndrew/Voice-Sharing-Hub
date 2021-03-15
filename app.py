@@ -47,6 +47,7 @@ def get_demo_name(voice_name):
 def download_files():
     voices = Voice.query.all()
     downloaded_files = os.listdir(samples_folder)
+    print("DOWNLOADING FILES")
 
     for voice in voices:
         sample = get_sample_name(voice.name)
@@ -73,7 +74,5 @@ with lock:
     db.create_all()
 
 from views import *
-
-if __name__ == "__main__":
-    download_files()
-    app.run(debug=True)
+download_files()
+app.run(debug=True)
