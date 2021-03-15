@@ -1,15 +1,12 @@
 from flask import request, render_template, redirect
-from app import app, db, Voice, upload_file_to_s3, BUCKET_URL
+from app import app, db, Voice, upload_file_to_s3, samples_folder, get_sample_name
 import requests
 import os
-
-def get_sample_name(voice_name):
-    return voice_name.replace(" ", "_") + ".wav"
 
 
 @app.route("/", methods=["GET"])
 def index():
-    voices = Voice.query.all() 
+    voices = Voice.query.all()
     return render_template("index.html", voices=voices)
 
 
@@ -20,7 +17,7 @@ def voice():
     except:
         return redirect("/")
 
-    audio_path = BUCKET_URL + get_sample_name(voice.name)
+    audio_path = os.path.join(samples_folder, get_sample_name(voice.name))
     return render_template("voice.html", voice=voice, audio_path=audio_path)
 
 
@@ -42,11 +39,9 @@ def create():
             upload_file_to_s3(f)
             data["has_audio"] = True
 
-        voice = Voice(
-            **data
-        )
+        voice = Voice(**data)
         db.session.add(voice)
         db.session.commit()
-        return redirect("/voice?id="+str(voice.id))
+        return redirect("/voice?id=" + str(voice.id))
     else:
         return render_template("create.html")
