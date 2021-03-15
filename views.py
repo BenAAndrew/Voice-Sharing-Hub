@@ -1,5 +1,5 @@
 from flask import request, render_template, redirect
-from app import app, db, Voice, upload_file_to_s3, samples_folder, get_sample_name
+from app import app, db, Voice, upload_file_to_s3, download_file, samples_folder, get_sample_name
 import requests
 import os
 
@@ -37,6 +37,7 @@ def create():
             f = request.files["audio_sample"]
             f.filename = get_sample_name(data["name"])
             upload_file_to_s3(f)
+            download_file(f.filename)
             data["has_audio"] = True
 
         voice = Voice(**data)
