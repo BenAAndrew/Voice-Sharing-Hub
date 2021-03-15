@@ -75,4 +75,6 @@ with lock:
 
 from views import *
 download_files()
-app.run(debug=True)
+
+if __name__ == "__main__":
+    app.run(debug=True)
