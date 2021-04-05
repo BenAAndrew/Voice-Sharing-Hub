@@ -23,6 +23,7 @@ db = SQLAlchemy(app)
 s3 = boto3.client("s3", aws_access_key_id=os.getenv("S3_KEY"), aws_secret_access_key=os.getenv("S3_SECRET"))
 BUCKET_NAME = "voicesharinghub"
 BUCKET_URL = "https://voicesharinghub.s3.eu-west-2.amazonaws.com/"
+WAVEGLOW_NAME = "waveglow.pt"
 
 
 def upload_file_to_s3(file):
@@ -56,7 +57,6 @@ def get_timestamp():
 def download_files():
     voices = Voice.query.all()
     downloaded_files = os.listdir(samples_folder)
-    print("DOWNLOADING FILES")
 
     for voice in voices:
         sample = get_sample_name(voice.name)
@@ -67,6 +67,9 @@ def download_files():
         if voice.has_demo and demo not in downloaded_files:
             print("Downloading", demo)
             download_file(demo)
+
+    if WAVEGLOW_NAME not in downloaded_files:
+        download_file(WAVEGLOW_NAME)
 
 
 class Voice(db.Model):
@@ -86,8 +89,8 @@ with lock:
     db.create_all()
 
 from views import *
-download_files()
 
 
 if __name__ == "__main__":
+    download_files()
     app.run(debug=False)

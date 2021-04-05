@@ -9,7 +9,8 @@ from app import (
     get_sample_name,
     results_folder,
     get_timestamp,
-    get_demo_name
+    get_demo_name,
+    WAVEGLOW_NAME
 )
 import requests
 import os
@@ -19,34 +20,9 @@ import inflect
 from synthesize import synthesize, load_model, load_waveglow
 
 
-# Models
-def preload_models(voices):
-    print("LOADING MODELS")
-    models = {}
-
-    for voice in voices:
-        if voice.has_demo:
-            demo = get_demo_name(voice.name)
-            print("Loading", demo)
-            models[voice.name] = load_model(os.path.join(samples_folder, demo))
-
-    return models
-
-
-def preload_waveglow():
-    print("LOADING WAVEGLOW")
-
-    if WAVEGLOW_NAME not in os.listdir(samples_folder):
-        download_file(WAVEGLOW_NAME)
-
-    print("Loading", WAVEGLOW_NAME)
-    return load_waveglow(os.path.join(samples_folder, WAVEGLOW_NAME))
-
-
-WAVEGLOW_NAME = "waveglow.pt"
 voices = Voice.query.all()
-models = preload_models(voices)
-waveglow = preload_waveglow()
+models = {}
+waveglow = load_waveglow(os.path.join(samples_folder, WAVEGLOW_NAME))
 
 # Synthesis
 inflect_engine = inflect.engine()
@@ -103,7 +79,14 @@ def demo_voice():
     if request.method == "POST":
         text = request.values["text"]
         voice = Voice.query.filter_by(id=request.values["id"]).one()
-        model = models[voice.name]
+        assert voice.has_demo, "Not enabled for demo"
+
+        if voice.name not in models:
+            demo = get_demo_name(voice.name)
+            print("Loading", demo)
+            models[voice.name] = load_model(os.path.join(samples_folder, demo))
+        
+        model = models[voice.name] 
         timestamp = get_timestamp()
         graph_path = os.path.join(results_folder, f"{timestamp}-{GRAPH}")
         audio_path = os.path.join(results_folder, f"{timestamp}-{AUDIO}")
