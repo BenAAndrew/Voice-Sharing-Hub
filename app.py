@@ -89,8 +89,7 @@ with lock:
     db.create_all()
 
 from views import *
-
+download_files()
 
 if __name__ == "__main__":
-    download_files()
     app.run(debug=False)
