@@ -45,8 +45,8 @@ def get_sample_name(voice_name):
     return voice_name.replace(" ", "_") + ".wav"
 
 
-def get_demo_name(voice_name):
-    return voice_name.replace(" ", "_") + ".pt"
+# def get_demo_name(voice_name):
+#     return voice_name.replace(" ", "_") + ".pt"
 
 
 def get_timestamp():
@@ -59,13 +59,12 @@ def download_files():
 
     for voice in voices:
         sample = get_sample_name(voice.name)
-        demo = get_demo_name(voice.name)
         if voice.has_audio and sample not in downloaded_files:
             print("Downloading", sample)
             download_file(sample)
-        if voice.has_demo and demo not in downloaded_files:
-            print("Downloading", demo)
-            download_file(demo)
+        # if voice.has_demo and demo not in downloaded_files:
+        #     print("Downloading", demo)
+        #     download_file(demo)
 
 
 class Voice(db.Model):
