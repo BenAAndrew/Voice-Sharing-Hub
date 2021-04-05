@@ -1,7 +1,27 @@
 from flask import request, render_template, redirect
-from app import app, db, Voice, upload_file_to_s3, download_file, samples_folder, get_sample_name
+from app import (
+    app,
+    db,
+    Voice,
+    upload_file_to_s3,
+    download_file,
+    samples_folder,
+    get_sample_name,
+    results_folder,
+    get_timestamp,
+    get_model_and_waveglow
+)
 import requests
 import os
+import inflect
+
+
+from synthesize import synthesize
+
+
+inflect_engine = inflect.engine()
+GRAPH = "graph.png"
+AUDIO = "audio.wav"
 
 
 @app.route("/", methods=["GET"])
@@ -46,3 +66,26 @@ def create():
         return redirect("/voice?id=" + str(voice.id))
     else:
         return render_template("create.html")
+
+
+@app.route("/demo-voice", methods=["GET", "POST"])
+def demo_voice():
+    if request.method == "POST":
+        text = request.values["text"]
+        voice = Voice.query.filter_by(id=request.values["id"]).one()
+        model, waveglow = get_model_and_waveglow(voice.name)
+        timestamp = get_timestamp()
+        graph_path = os.path.join(results_folder, f"{timestamp}-{GRAPH}")
+        audio_path = os.path.join(results_folder, f"{timestamp}-{AUDIO}")
+        synthesize(model, waveglow, text, inflect_engine, graph=graph_path, audio=audio_path)
+        return render_template("demo.html", voice=voice, graph=graph_path, audio=audio_path, text=text)
+    else:
+        try:
+            voice = Voice.query.filter_by(id=request.args.get("id")).one()
+        except:
+            return redirect("/")
+
+        if not voice.has_demo:
+            return redirect(f"/voice?id={voice.id}")
+
+        return render_template("demo.html", voice=voice)

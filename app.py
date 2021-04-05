@@ -3,10 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import threading
 import boto3
+from datetime import datetime
 
+from synthesize import load_model, load_waveglow
+
+# Flask
 app = Flask(__name__, template_folder="static", static_folder="static")
 samples_folder = os.path.join("static", "samples")
+results_folder = os.path.join("static", "results")
 os.makedirs(samples_folder, exist_ok=True)
+os.makedirs(results_folder, exist_ok=True)
 
 # Database
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -44,8 +50,11 @@ def get_demo_name(voice_name):
     return voice_name.replace(" ", "_") + ".pt"
 
 
-def download_files():
-    voices = Voice.query.all()
+def get_timestamp():
+    return datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+
+
+def download_files(voices):
     downloaded_files = os.listdir(samples_folder)
     print("DOWNLOADING FILES")
 
@@ -53,8 +62,34 @@ def download_files():
         sample = get_sample_name(voice.name)
         demo = get_demo_name(voice.name)
         if voice.has_audio and sample not in downloaded_files:
-            print("Downloading ",sample)
+            print("Downloading", sample)
             download_file(sample)
+        if voice.has_demo and demo not in downloaded_files:
+            print("Downloading", demo)
+            download_file(demo)
+
+
+def preload_models(voices):
+    print("LOADING MODELS")
+    models = {}
+
+    for voice in voices:
+        if voice.has_demo:
+            demo = get_demo_name(voice.name)
+            print("Loading", demo)
+            models[voice.name] = load_model(os.path.join(samples_folder, demo))
+
+    return models
+
+
+def preload_waveglow():
+    print("LOADING WAVEGLOW")
+
+    if WAVEGLOW_NAME not in os.listdir(samples_folder):
+        download_file(WAVEGLOW_NAME)
+
+    print("Loading", WAVEGLOW_NAME)
+    return load_waveglow(os.path.join(samples_folder, WAVEGLOW_NAME))
 
 
 class Voice(db.Model):
@@ -74,7 +109,18 @@ with lock:
     db.create_all()
 
 from views import *
-download_files()
+voices = Voice.query.all()
+download_files(voices)
+
+# Models
+WAVEGLOW_NAME = "waveglow.pt"
+models = preload_models(voices)
+waveglow = preload_waveglow()
+
+
+def get_model_and_waveglow(name):
+    return models[name], waveglow
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="/voice?id={{ voice.id }}">Back</a>
+<h1>{{ voice.name }} demo</h1>
+<div class="container">
+	<div class="row">
+	  <div class="col-12">
+		<form method="post" action="/demo-voice">
+			<input type="hidden" name="id" value="{{ voice.id }}">
+			<div class="row gtr-uniform">
+				<div class="col-6 col-12-xsmall">
+					<input type="text" name="text" placeholder="Text" value="{{ text }}">
+				</div>
+				<div class="col-6 col-12-xsmall">
+					<input type="submit" class="primary">
+				</div>
+			</div>
+		</form>
+	  </div>
+	</div>
+	{% if graph %}
+		<div class="row">
+			<div class="col-6">
+				<span class="image fit"><img src="{{ graph }}" alt="Alignment"></span>
+			</div>	
+			<div class="col-4">
+				<figure>
+					<figcaption>Audio sample</figcaption>
+					<audio controls src="{{ audio }}">
+						Your browser does not support the
+						<code>audio</code> element.
+					</audio>
+				</figure>
+			</div>
+		</div>
+	{% endif %}
+</div>
+{% endblock %}

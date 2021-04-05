@@ -2559,6 +2559,16 @@ input, select, textarea {
 			opacity: 0.25;
 		}
 
+		.button.demo {
+			box-shadow: none;
+			background-color: #28a745;
+			color: #ffffff !important;
+		}
+
+		.button.demo:hover {
+			background-color: #59c973;
+		}
+
 /* Tiles */
 
 	.tiles {
