@@ -9,8 +9,7 @@ from app import (
     get_sample_name,
     results_folder,
     get_timestamp,
-    get_demo_name,
-    WAVEGLOW_NAME
+    get_demo_name
 )
 import requests
 import os
@@ -20,12 +19,15 @@ import inflect
 from synthesize import synthesize, load_model, load_waveglow
 
 
-voices = Voice.query.all()
-models = {}
+# Waveglow
+WAVEGLOW_NAME = "waveglow.pt"
+if WAVEGLOW_NAME not in os.listdir(samples_folder):
+    download_file(WAVEGLOW_NAME)
 waveglow = load_waveglow(os.path.join(samples_folder, WAVEGLOW_NAME))
 
 # Synthesis
 inflect_engine = inflect.engine()
+models = {}
 GRAPH = "graph.png"
 AUDIO = "audio.wav"
 
