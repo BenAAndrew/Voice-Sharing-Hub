@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+{% if not voices %}
+    <form method="POST">
+        <input type="password" name="password" required>
+        <input type="submit">
+    </form>
+{% else %}
+<table>
+    <tr>
+        <th>Voice</th>
+        <th>Demo Enabled</th>
+        <th>Options</th>
+    </tr>
+    {% for voice in voices %}
+        <tr>
+            <td>{{ voice.name }}</td>
+            <td>{{ voice.has_demo }}</td>
+            <td>
+                <form action="/demo-settings" method="POST">
+                    <input type="hidden" name="password" value="{{ password }}">
+                    <input type="hidden" name="id" value="{{ voice.id }}">
+                    <input type="submit" value="Change demo status">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+</body>
+</html>

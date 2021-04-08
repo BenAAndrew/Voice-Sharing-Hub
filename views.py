@@ -12,12 +12,33 @@ from app import (
 )
 import requests
 import os
+service_password = os.getenv("SERVICE_PASSWORD")
 
 
 @app.route("/", methods=["GET"])
 def index():
     voices = Voice.query.all()
     return render_template("index.html", voices=voices)
+
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    if request.method == "POST":
+        if request.values["password"] == service_password:
+            voices = Voice.query.all()
+            return render_template("admin.html", voices=voices, password=request.values["password"])
+    return render_template("admin.html")
+
+
+@app.route("/demo-settings", methods=["POST"])
+def demo_settings():
+    if request.values["password"] == service_password:
+        voice = Voice.query.filter_by(id=request.values["id"]).one()
+        voice.has_demo = not voice.has_demo
+        db.session.add(voice)
+        print(voice)
+        db.session.commit()
+    return redirect("/admin")
 
 
 @app.route("/voice", methods=["GET"])
