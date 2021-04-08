@@ -3,15 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import threading
 import boto3
-from datetime import datetime
+import requests
 
 
 # Flask
 app = Flask(__name__, template_folder="static", static_folder="static")
 samples_folder = os.path.join("static", "samples")
-results_folder = os.path.join("static", "results")
 os.makedirs(samples_folder, exist_ok=True)
-os.makedirs(results_folder, exist_ok=True)
 
 # Database
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -23,6 +21,9 @@ db = SQLAlchemy(app)
 s3 = boto3.client("s3", aws_access_key_id=os.getenv("S3_KEY"), aws_secret_access_key=os.getenv("S3_SECRET"))
 BUCKET_NAME = "voicesharinghub"
 BUCKET_URL = "https://voicesharinghub.s3.eu-west-2.amazonaws.com/"
+
+# Demo
+DEMO_URL = "https://voice-cloning-api.herokuapp.com/"
 
 
 def upload_file_to_s3(file):
@@ -41,16 +42,13 @@ def download_file(filename):
         print(e)
 
 
+def get_demo_results(voice_name, text):
+    r = requests.get(url=DEMO_URL, params={"name": voice_name, "text": text})
+    return r.json()
+
+
 def get_sample_name(voice_name):
     return voice_name.replace(" ", "_") + ".wav"
-
-
-# def get_demo_name(voice_name):
-#     return voice_name.replace(" ", "_") + ".pt"
-
-
-def get_timestamp():
-    return datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
 
 
 def download_files():
@@ -62,9 +60,6 @@ def download_files():
         if voice.has_audio and sample not in downloaded_files:
             print("Downloading", sample)
             download_file(sample)
-        # if voice.has_demo and demo not in downloaded_files:
-        #     print("Downloading", demo)
-        #     download_file(demo)
 
 
 class Voice(db.Model):
@@ -77,6 +72,18 @@ class Voice(db.Model):
     image_url = db.Column(db.String(200), nullable=True)
     has_audio = db.Column(db.Boolean, default=False)
     has_demo = db.Column(db.Boolean, default=False)
+
+
+# class Suggestion(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50), nullable=False)
+#     description = db.Column(db.String(200), nullable=False)
+#     source_url = db.Column(db.String(200), nullable=False)
+
+# class Vote(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     suggestion_id = db.Column(db.Integer, nullable=False)
+#     ip = db.Column(db.String(200), nullable=False)
 
 
 lock = threading.Lock()
