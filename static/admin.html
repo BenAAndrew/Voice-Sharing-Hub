@@ -15,7 +15,16 @@
     </tr>
     {% for voice in voices %}
         <tr>
-            <td>{{ voice.name }}</td>
+            <td>
+                <form action="/update-voice" method="POST">
+                    <input type="hidden" name="password" value="{{ password }}">
+                    <input type="hidden" name="id" value="{{ voice.id }}">
+                    <input type="text" name="name" value="{{ voice.name }}">
+                    <textarea rows="3" cols="50" name="description">{{ voice.description }}</textarea>
+                    <textarea rows="3" cols="50" name="source_url">{{ voice.source_url }}</textarea>
+                    <input type="submit" value="Update details">
+                </form>
+            </td>
             <td>{{ voice.has_demo }}</td>
             <td>
                 <form action="/demo-settings" method="POST">

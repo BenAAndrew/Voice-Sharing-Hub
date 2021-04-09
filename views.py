@@ -41,6 +41,18 @@ def demo_settings():
     return redirect("/admin")
 
 
+@app.route("/update-voice", methods=["POST"])
+def update_voice():
+    if request.values["password"] == service_password:
+        voice = Voice.query.filter_by(id=request.values["id"]).one()
+        voice.name = request.values["name"]
+        voice.description = request.values["description"]
+        voice.source_url = request.values["source_url"]
+        db.session.add(voice)
+        db.session.commit()
+    return redirect("/admin")
+
+
 @app.route("/voice", methods=["GET"])
 def voice():
     try:
