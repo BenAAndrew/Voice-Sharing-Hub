@@ -48,6 +48,8 @@ def update_voice():
         voice.name = request.values["name"]
         voice.description = request.values["description"]
         voice.source_url = request.values["source_url"]
+        voice.dataset_url = request.values["dataset_url"]
+        voice.model_url = request.values["model_url"]
         db.session.add(voice)
         db.session.commit()
     return redirect("/admin")
