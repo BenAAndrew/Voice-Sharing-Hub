@@ -53,6 +53,14 @@ def update_voice():
     return redirect("/admin")
 
 
+@app.route("/delete-voice", methods=["POST"])
+def delete_voice():
+    if request.values["password"] == service_password:
+        voice = Voice.query.filter_by(id=request.values["id"]).one()
+        voice.delete()
+    return redirect("/admin")
+
+
 @app.route("/voice", methods=["GET"])
 def voice():
     try:

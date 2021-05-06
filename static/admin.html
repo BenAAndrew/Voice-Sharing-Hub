@@ -32,6 +32,11 @@
                     <input type="hidden" name="id" value="{{ voice.id }}">
                     <input type="submit" value="Change demo status">
                 </form>
+                <form action="/delete-voice" method="POST">
+                    <input type="hidden" name="password" value="{{ password }}">
+                    <input type="hidden" name="id" value="{{ voice.id }}">
+                    <input type="submit" value="Delete voice">
+                </form>
             </td>
         </tr>
     {% endfor %}
