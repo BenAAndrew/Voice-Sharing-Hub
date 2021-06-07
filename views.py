@@ -59,7 +59,8 @@ def update_voice():
 def delete_voice():
     if request.values["password"] == service_password:
         voice = Voice.query.filter_by(id=request.values["id"]).one()
-        voice.delete()
+        db.session.delete(voice)
+        db.session.commit()
     return redirect("/admin")
 
 
