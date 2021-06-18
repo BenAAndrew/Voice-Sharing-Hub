@@ -73,6 +73,7 @@ class Voice(db.Model):
     image_url = db.Column(db.String(200), nullable=True)
     has_audio = db.Column(db.Boolean, default=False)
     has_demo = db.Column(db.Boolean, default=False)
+    verified = db.Column(db.Boolean, default=False)
 
 
 # class Suggestion(db.Model):

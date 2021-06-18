@@ -10,6 +10,7 @@
 <table>
     <tr>
         <th>Voice</th>
+        <th>Verified</th>
         <th>Demo Enabled</th>
         <th>Options</th>
     </tr>
@@ -20,15 +21,21 @@
                     <input type="hidden" name="password" value="{{ password }}">
                     <input type="hidden" name="id" value="{{ voice.id }}">
                     <input type="text" name="name" value="{{ voice.name }}">
-                    <textarea rows="3" cols="50" name="description">{{ voice.description }}</textarea>
-                    <textarea rows="3" cols="50" name="source_url">{{ voice.source_url }}</textarea>
-                    <textarea rows="3" cols="50" name="dataset_url">{{ voice.dataset_url }}</textarea>
-                    <textarea rows="3" cols="50" name="model_url">{{ voice.model_url }}</textarea>
+                    <textarea rows="4" cols="30" name="description">{{ voice.description }}</textarea>
+                    <textarea rows="4" cols="30" name="source_url">{{ voice.source_url }}</textarea>
+                    <textarea rows="4" cols="30" name="dataset_url">{{ voice.dataset_url }}</textarea>
+                    <textarea rows="4" cols="30" name="model_url">{{ voice.model_url }}</textarea>
                     <input type="submit" value="Update details">
                 </form>
             </td>
+            <td>{{ voice.verified }}</td>
             <td>{{ voice.has_demo }}</td>
             <td>
+                <form action="/verify-voice" method="POST">
+                    <input type="hidden" name="password" value="{{ password }}">
+                    <input type="hidden" name="id" value="{{ voice.id }}">
+                    <input type="submit" value="Change verified status">
+                </form>
                 <form action="/demo-settings" method="POST">
                     <input type="hidden" name="password" value="{{ password }}">
                     <input type="hidden" name="id" value="{{ voice.id }}">

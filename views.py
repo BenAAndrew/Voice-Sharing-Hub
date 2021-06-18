@@ -41,6 +41,16 @@ def demo_settings():
     return redirect("/admin")
 
 
+@app.route("/verify-voice", methods=["POST"])
+def verify_voice():
+    if request.values["password"] == service_password:
+        voice = Voice.query.filter_by(id=request.values["id"]).one()
+        voice.verified = not voice.verified
+        db.session.add(voice)
+        db.session.commit()
+    return redirect("/admin")
+
+
 @app.route("/update-voice", methods=["POST"])
 def update_voice():
     if request.values["password"] == service_password:
