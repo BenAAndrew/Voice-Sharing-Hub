@@ -18,7 +18,7 @@ service_password = os.getenv("SERVICE_PASSWORD")
 
 @app.route("/", methods=["GET"])
 def index():
-    voices = Voice.query.order_by(Voice.id.asc())
+    voices = Voice.query.filter_by(verified=True).order_by(Voice.id.asc())
     return render_template("index.html", voices=voices)
 
 
