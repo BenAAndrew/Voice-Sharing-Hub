@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+{% if not voice.verified %}
+	<div style="padding: 20px; background-color: #f44336; color: white;">
+		This voice has not yet been approved so will not show on the homepage
+	</div>
+{% endif %}
 <a href="/">Back</a>
 <h1>{{ voice.name }}</h1>
 <div class="container">
