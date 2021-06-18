@@ -76,18 +76,6 @@ class Voice(db.Model):
     verified = db.Column(db.Boolean, default=False)
 
 
-# class Suggestion(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50), nullable=False)
-#     description = db.Column(db.String(200), nullable=False)
-#     source_url = db.Column(db.String(200), nullable=False)
-
-# class Vote(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     suggestion_id = db.Column(db.Integer, nullable=False)
-#     ip = db.Column(db.String(200), nullable=False)
-
-
 lock = threading.Lock()
 with lock:
     db.create_all()

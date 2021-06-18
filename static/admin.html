@@ -50,6 +50,11 @@
         </tr>
     {% endfor %}
 </table>
+<br>
+<form action="/import-voices" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Import voices">
+</form>
 {% endif %}
 </body>
 </html>

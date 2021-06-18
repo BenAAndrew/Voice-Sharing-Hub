@@ -12,6 +12,7 @@ from app import (
 )
 import requests
 import os
+import csv
 service_password = os.getenv("SERVICE_PASSWORD")
 
 
@@ -70,6 +71,16 @@ def delete_voice():
     if request.values["password"] == service_password:
         voice = Voice.query.filter_by(id=request.values["id"]).one()
         db.session.delete(voice)
+        db.session.commit()
+    return redirect("/admin")
+
+
+@app.route("/import-voices", methods=["POST"])
+def import_voices():
+    if request.values["password"] == service_password:
+        request.files["file"].save("temp.csv")
+        for row in csv.DictReader(open("temp.csv")):
+            db.session.add(row)
         db.session.commit()
     return redirect("/admin")
 
