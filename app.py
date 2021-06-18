@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import os
 import threading
 import boto3
@@ -17,7 +16,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024  # 1MB
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 # S3
 s3 = boto3.client("s3", aws_access_key_id=os.getenv("S3_KEY"), aws_secret_access_key=os.getenv("S3_SECRET"))
@@ -77,10 +75,22 @@ class Voice(db.Model):
     has_demo = db.Column(db.Boolean, default=False)
     verified = db.Column(db.Boolean, default=False)
 
+
+# class Suggestion(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50), nullable=False)
+#     description = db.Column(db.String(200), nullable=False)
+#     source_url = db.Column(db.String(200), nullable=False)
+
+# class Vote(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     suggestion_id = db.Column(db.Integer, nullable=False)
+#     ip = db.Column(db.String(200), nullable=False)
+
+
 lock = threading.Lock()
 with lock:
-    db.init_app(app)
-    migrate.init_app(app, db)
+    db.create_all()
 
 from views import *
 download_files()
