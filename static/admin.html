@@ -52,6 +52,7 @@
 </table>
 <br>
 <form action="/import-voices" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="password" value="{{ password }}">
     <input type="file" name="file">
     <input type="submit" value="Import voices">
 </form>

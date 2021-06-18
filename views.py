@@ -80,7 +80,13 @@ def import_voices():
     if request.values["password"] == service_password:
         request.files["file"].save("temp.csv")
         for row in csv.DictReader(open("temp.csv")):
-            db.session.add(row)
+            for field in row:
+                if row[field] == "true":
+                    row[field] = True
+                elif row[field] == "false":
+                    row[field] = False
+            voice = Voice(**row)
+            db.session.add(voice)
         db.session.commit()
     return redirect("/admin")
 
